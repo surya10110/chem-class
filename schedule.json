@@ -1,0 +1,307 @@
+{
+  "className": "Chemical Batch 2028",
+  "notice": "Odd semester 2026-27 timetable, effective 29.06.2026.",
+  "days": {
+    "Monday": [
+      {
+        "code": "MT",
+        "subject": "Mass Transfer II",
+        "start": "08:00",
+        "end": "08:45",
+        "room": "UCH3503",
+        "teacher": "Dr. Nalinkanth V Ghone",
+        "status": "auto"
+      },
+      {
+        "code": "T2",
+        "subject": "Chemical Engg. Thermodynamics II",
+        "start": "08:45",
+        "end": "09:30",
+        "room": "UCH3501",
+        "teacher": "Dr. Anup Kundu / Dr. R. Anantharaj",
+        "status": "auto"
+      },
+      {
+        "code": "NM",
+        "subject": "Numerical Methods in Chemical Engg.",
+        "start": "09:50",
+        "end": "11:20",
+        "room": "UMA3561",
+        "teacher": "Dr. I Jayakaran Amalraj",
+        "status": "auto"
+      },
+      {
+        "code": "CR",
+        "subject": "Chemical Reaction Engineering I",
+        "start": "11:20",
+        "end": "12:05",
+        "room": "UCH3502",
+        "teacher": "Dr. B. Chitra",
+        "status": "auto"
+      },
+      {
+        "code": "PE",
+        "subject": "PE 1: Air Pollution Control / Food Technology",
+        "start": "13:05",
+        "end": "13:50",
+        "room": "UCH3521 / UCH3527",
+        "teacher": "Dr. V Jaikumar / Dr. D. Gnana Prakash",
+        "status": "auto"
+      },
+      {
+        "code": "IR",
+        "subject": "Independent Research",
+        "start": "14:10",
+        "end": "15:40",
+        "room": "UGP3517",
+        "teacher": "Dr. Nalinkanth V Ghone",
+        "status": "auto"
+      }
+    ],
+    "Tuesday": [
+      {
+        "code": "OE",
+        "subject": "Open Elective",
+        "start": "08:00",
+        "end": "09:30",
+        "room": "",
+        "teacher": "",
+        "status": "auto"
+      },
+      {
+        "code": "CR",
+        "subject": "Chemical Reaction Engineering I",
+        "start": "09:50",
+        "end": "10:35",
+        "room": "UCH3502",
+        "teacher": "Dr. B. Chitra",
+        "status": "auto"
+      },
+      {
+        "code": "MT",
+        "subject": "Mass Transfer II",
+        "start": "10:35",
+        "end": "11:20",
+        "room": "UCH3503",
+        "teacher": "Dr. Nalinkanth V Ghone",
+        "status": "auto"
+      },
+      {
+        "code": "LB",
+        "subject": "Mass Transfer Lab / Numerical Methods Lab (batch-wise)",
+        "start": "12:20",
+        "end": "14:55",
+        "room": "UCH3511 / UMA3561",
+        "teacher": "DGP / NVG // AK / IJA",
+        "status": "auto"
+      },
+      {
+        "code": "NS",
+        "subject": "Elements of Nanoscience and Nanotechnology (Hons)",
+        "start": "14:55",
+        "end": "15:40",
+        "room": "UCH3526",
+        "teacher": "Dr. Saroj Kumar Panda",
+        "status": "auto"
+      }
+    ],
+    "Wednesday": [
+      {
+        "code": "T2",
+        "subject": "Chemical Engg. Thermodynamics II",
+        "start": "08:00",
+        "end": "08:45",
+        "room": "UCH3501",
+        "teacher": "Dr. Anup Kundu / Dr. R. Anantharaj",
+        "status": "auto"
+      },
+      {
+        "code": "NM",
+        "subject": "Numerical Methods in Chemical Engg.",
+        "start": "08:45",
+        "end": "09:30",
+        "room": "UMA3561",
+        "teacher": "Dr. I Jayakaran Amalraj",
+        "status": "auto"
+      },
+      {
+        "code": "CR",
+        "subject": "Chemical Reaction Engineering I",
+        "start": "09:50",
+        "end": "10:35",
+        "room": "UCH3502",
+        "teacher": "Dr. B. Chitra",
+        "status": "auto"
+      },
+      {
+        "code": "MT",
+        "subject": "Mass Transfer II",
+        "start": "10:35",
+        "end": "11:20",
+        "room": "UCH3503",
+        "teacher": "Dr. Nalinkanth V Ghone",
+        "status": "auto"
+      },
+      {
+        "code": "IR",
+        "subject": "Library / Independent Research",
+        "start": "11:20",
+        "end": "12:05",
+        "room": "UGP3517",
+        "teacher": "Dr. Nalinkanth V Ghone",
+        "status": "auto"
+      },
+      {
+        "code": "PE",
+        "subject": "PE 1: Air Pollution Control / Food Technology",
+        "start": "13:05",
+        "end": "13:50",
+        "room": "UCH3521 / UCH3527",
+        "teacher": "Dr. V Jaikumar / Dr. D. Gnana Prakash",
+        "status": "auto"
+      },
+      {
+        "code": "NS",
+        "subject": "Elements of Nanoscience and Nanotechnology (Hons)",
+        "start": "14:10",
+        "end": "14:55",
+        "room": "UCH3526",
+        "teacher": "Dr. Saroj Kumar Panda",
+        "status": "auto"
+      },
+      {
+        "code": "BP",
+        "subject": "Bioprocess Technology (Hons)",
+        "start": "14:55",
+        "end": "15:40",
+        "room": "UCH3522",
+        "teacher": "Dr. D Balaji",
+        "status": "auto"
+      }
+    ],
+    "Thursday": [
+      {
+        "code": "T2",
+        "subject": "Chemical Engg. Thermodynamics II",
+        "start": "08:00",
+        "end": "08:45",
+        "room": "UCH3501",
+        "teacher": "Dr. Anup Kundu / Dr. R. Anantharaj",
+        "status": "auto"
+      },
+      {
+        "code": "PE",
+        "subject": "PE 1: Air Pollution Control / Food Technology",
+        "start": "08:45",
+        "end": "09:30",
+        "room": "UCH3521 / UCH3527",
+        "teacher": "Dr. V Jaikumar / Dr. D. Gnana Prakash",
+        "status": "auto"
+      },
+      {
+        "code": "OE",
+        "subject": "Open Elective",
+        "start": "09:50",
+        "end": "12:05",
+        "room": "",
+        "teacher": "",
+        "status": "auto"
+      },
+      {
+        "code": "LB",
+        "subject": "Mass Transfer Lab / Numerical Methods Lab (batch-wise)",
+        "start": "12:20",
+        "end": "14:55",
+        "room": "UCH3511 / UMA3561",
+        "teacher": "DGP / NVG // AK / IJA",
+        "status": "auto"
+      },
+      {
+        "code": "BP",
+        "subject": "Bioprocess Technology (Hons)",
+        "start": "14:55",
+        "end": "15:40",
+        "room": "UCH3522",
+        "teacher": "Dr. D Balaji",
+        "status": "auto"
+      }
+    ],
+    "Friday": [
+      {
+        "code": "CR",
+        "subject": "Chemical Reaction Engineering I",
+        "start": "08:00",
+        "end": "08:45",
+        "room": "UCH3502",
+        "teacher": "Dr. B. Chitra",
+        "status": "auto"
+      },
+      {
+        "code": "NM",
+        "subject": "Numerical Methods in Chemical Engg.",
+        "start": "08:45",
+        "end": "09:30",
+        "room": "UMA3561",
+        "teacher": "Dr. I Jayakaran Amalraj",
+        "status": "auto"
+      },
+      {
+        "code": "MT",
+        "subject": "Mass Transfer II",
+        "start": "09:50",
+        "end": "10:35",
+        "room": "UCH3503",
+        "teacher": "Dr. Nalinkanth V Ghone",
+        "status": "auto"
+      },
+      {
+        "code": "SL",
+        "subject": "Self Learning / Mentoring / Independent Research",
+        "start": "10:35",
+        "end": "11:20",
+        "room": "UGP3517",
+        "teacher": "Dr. Nalinkanth V Ghone",
+        "status": "auto"
+      },
+      {
+        "code": "PE",
+        "subject": "PE 1: Air Pollution Control / Food Technology",
+        "start": "11:20",
+        "end": "12:05",
+        "room": "UCH3521 / UCH3527",
+        "teacher": "Dr. V Jaikumar / Dr. D. Gnana Prakash",
+        "status": "auto"
+      },
+      {
+        "code": "NS",
+        "subject": "Elements of Nanoscience and Nanotechnology (Hons)",
+        "start": "13:05",
+        "end": "13:50",
+        "room": "UCH3526",
+        "teacher": "Dr. Saroj Kumar Panda",
+        "status": "auto"
+      },
+      {
+        "code": "T2",
+        "subject": "Chemical Engg. Thermodynamics II",
+        "start": "14:10",
+        "end": "14:55",
+        "room": "UCH3501",
+        "teacher": "Dr. Anup Kundu / Dr. R. Anantharaj",
+        "status": "auto"
+      },
+      {
+        "code": "BP",
+        "subject": "Bioprocess Technology (Hons)",
+        "start": "14:55",
+        "end": "15:40",
+        "room": "UCH3522",
+        "teacher": "Dr. D Balaji",
+        "status": "auto"
+      }
+    ],
+    "Saturday": [],
+    "Sunday": []
+  },
+  "sub": "V Sem B.Tech (R-2024) · Department of Chemical Engineering"
+}
