@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Class Schedule</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=IBM+Plex+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef5f4;--card:#fff;--ink:#0b2530;--mute:#5b7480;--line:#cfe0de;--head:#0b2530;--liquid:#2dd4bf;--live:#0f9d58;--soon:#d99a1c;--done:#8a9ba3;--bad:#d64545}
+@media(prefers-color-scheme:dark){:root{--bg:#081a22;--card:#0f2833;--ink:#e6f2f1;--mute:#8fb0b8;--line:#1e4150;--head:#05121a}}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:400 16px/1.5 "IBM Plex Sans",system-ui,sans-serif;padding-bottom:env(safe-area-inset-bottom)}
+header{background:var(--head);color:#e6f2f1;padding:calc(20px + env(safe-area-inset-top)) 20px 18px;background-image:radial-gradient(circle at 92% 20%,rgba(45,212,191,.25),transparent 40%)}
+h1{font:800 26px/1.15 "Bricolage Grotesque",sans-serif;margin:0 0 4px}
+.sub{color:#9fc3c8;font-size:14px}
+main{max-width:720px;margin:0 auto;padding:16px}
+.notice{background:#fff4d6;color:#5a4300;border-left:5px solid var(--soon);padding:12px 14px;border-radius:8px;margin-bottom:14px}
+.notice:empty{display:none}
+.days{display:flex;gap:8px;overflow-x:auto;padding-bottom:10px;margin-bottom:6px}
+.days button{flex:0 0 auto;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:8px 14px;border-radius:999px;font:500 14px "IBM Plex Sans",sans-serif;cursor:pointer}
+.days button[aria-pressed=true]{background:var(--head);color:#fff;border-color:var(--head)}
+.days button:focus-visible{outline:3px solid var(--liquid);outline-offset:2px}
+.card{display:flex;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:12px;position:relative;overflow:hidden}
+.tile{flex:0 0 72px;height:84px;border:2px solid var(--ink);border-radius:6px;display:flex;flex-direction:column;justify-content:space-between;padding:5px 7px;position:relative;overflow:hidden;background:var(--card)}
+.tile .fill{position:absolute;left:0;right:0;bottom:0;background:var(--liquid);opacity:.55;transition:height 1s}
+.tile .n,.tile .s{position:relative}
+.tile .n{font-size:11px;color:var(--mute)}
+.tile .s{font:800 30px/1 "Bricolage Grotesque",sans-serif;text-align:center}
+.info{min-width:0;flex:1}
+.info h2{font:600 18px/1.25 "Bricolage Grotesque",sans-serif;margin:0 0 2px}
+.meta{color:var(--mute);font-size:14px}
+.time{font-weight:500;margin-top:4px}
+.badge{display:inline-block;margin-top:8px;padding:3px 10px;border-radius:999px;font-size:13px;font-weight:500;color:#fff}
+.b-live{background:var(--live)}.b-soon{background:var(--soon)}.b-done{background:var(--done)}.b-cancelled,.b-moved{background:var(--bad)}
+.b-live::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:#fff;margin-right:6px;animation:p 1.4s infinite}
+@keyframes p{50%{opacity:.25}}
+@media(prefers-reduced-motion:reduce){.b-live::before{animation:none}.tile .fill{transition:none}}
+.cancelled .info h2{text-decoration:line-through}
+.empty,.err{text-align:center;color:var(--mute);padding:30px 10px}
+footer{text-align:center;color:var(--mute);font-size:13px;padding:10px 16px 28px}
+.adm{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+input,select,button.pri,#admin button{font:400 15px "IBM Plex Sans",sans-serif}
+.adm select,.adm input,#admin input{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+#admin{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:14px;display:flex;flex-direction:column;gap:8px}
+#admin[hidden]{display:none}
+#admin h3{margin:0;font:600 18px "Bricolage Grotesque",sans-serif}
+#admin button{padding:10px 14px;border:0;border-radius:8px;background:var(--head);color:#fff;cursor:pointer}
+#admin button.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+#admin .row{display:flex;gap:8px}
+#am{color:var(--mute);font-size:14px}
+footer a{color:var(--mute)}
+header{position:relative;overflow:hidden}
+.hd{position:relative;display:flex;gap:14px;align-items:center}
+.flask{width:52px;height:52px;flex:0 0 52px}
+.rings{position:absolute;right:-30px;top:-10px;width:260px;opacity:.16;pointer-events:none}
+body{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100' viewBox='0 0 56 100'%3E%3Cpath d='M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100' fill='none' stroke='%232dd4bf' stroke-opacity='.18'/%3E%3Cpath d='M28 0L28 34L0 50L0 84L28 100L56 84L56 50L28 34' fill='none' stroke='%232dd4bf' stroke-opacity='.18'/%3E%3C/svg%3E")}
+.card{border-left:6px solid var(--line)}
+.card.live{border-left-color:var(--live)}.card.soon{border-left-color:var(--soon)}.card.done{border-left-color:var(--done)}.card.cancelled,.card.moved{border-left-color:var(--bad)}
+.tile{border-radius:6px 6px 14px 14px}
+#admbtn{position:absolute;top:calc(12px + env(safe-area-inset-top));right:12px;z-index:3;border:1.5px solid var(--liquid);background:rgba(45,212,191,.1);color:#e6f2f1;padding:6px 14px;border-radius:8px;font:500 14px "IBM Plex Sans",sans-serif;cursor:pointer}
+.hd{padding-right:84px}
+dialog{border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);padding:20px;width:min(92vw,360px)}
+dialog::backdrop{background:rgba(0,0,0,.55)}
+.f{display:flex;flex-direction:column;gap:10px}
+.f h3{margin:0;font:600 20px "Bricolage Grotesque",sans-serif}
+input,select{font:400 15px "IBM Plex Sans",sans-serif}
+.f input,#admin select,#admin summary{width:100%}
+.f input,#admin select{padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+.f button,.lnk{padding:10px 14px;border:0;border-radius:8px;background:var(--head);color:#fff;font:500 15px "IBM Plex Sans",sans-serif;cursor:pointer}
+.f .ghost,.lnk{background:transparent;color:var(--mute);border:1px solid var(--line)}
+#admin .row input{flex:1;min-width:0}
+#admin summary{cursor:pointer;padding:6px 0;font-weight:500}
+#admin details>div{display:flex;flex-direction:column;gap:8px;padding-top:6px}
+.lb{font-weight:500;font-size:14px}
+.ann{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--soon);border-radius:10px;padding:12px 14px;margin-bottom:14px}
+.ann h3{margin:0 0 6px;font:600 17px "Bricolage Grotesque",sans-serif}
+.ann .it{display:flex;gap:10px;justify-content:space-between;align-items:flex-start;padding:8px 0;border-top:1px solid var(--line)}
+.ann .it:first-of-type{border-top:0}
+.ann small{display:block;color:var(--mute)}
+.ann button,.del{border:1px solid var(--bad);background:transparent;color:var(--bad);border-radius:8px;padding:5px 10px;font:500 13px "IBM Plex Sans",sans-serif;cursor:pointer}
+.del{margin-top:8px;align-self:flex-start}
+.chip{display:inline-block;border:1px solid #2dd4bf;color:#2dd4bf;border-radius:999px;padding:1px 10px;font-size:12px;margin-bottom:4px}.chip:empty{display:none}
+.days button.hol{border-color:var(--bad);color:var(--bad)}.days button.hol[aria-pressed=true]{background:var(--bad);color:#fff}
+.holc{background:var(--card);border:1px solid var(--bad);border-left:6px solid var(--bad);border-radius:10px;padding:16px;text-align:center;margin-bottom:12px}.holc h2{margin:0 0 4px;font:600 20px "Bricolage Grotesque",sans-serif;color:var(--bad)}
+.ann.hol{border-left-color:var(--bad)}
+.row2{display:flex;gap:8px;margin-top:8px}.row2 .del{margin-top:0}
+.ed{border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:8px;padding:5px 10px;font:500 13px "IBM Plex Sans",sans-serif;cursor:pointer}
+.f select{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+.f .row{display:flex;gap:8px}.f .row input{flex:1;min-width:0}
+.f textarea{width:100%;min-height:46vh;padding:10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:13px/1.5 ui-monospace,Menlo,Consolas,monospace;white-space:pre}
+#tdlg{width:min(94vw,680px)}
+.calw{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-bottom:14px}
+.calw summary{cursor:pointer;font:600 17px "Bricolage Grotesque",sans-serif}
+.calh{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:10px 0}
+.calh .cn{border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:8px;padding:4px 10px;font:500 14px "IBM Plex Sans",sans-serif;cursor:pointer}
+.calg{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+.cw{font-size:12px;color:var(--mute)}
+.cd{aspect-ratio:1;border:1px solid transparent;background:transparent;color:var(--ink);border-radius:8px;font:500 14px "IBM Plex Sans",sans-serif;cursor:pointer;padding:0}
+.cd:focus-visible,.cn:focus-visible{outline:3px solid var(--liquid)}
+.cd.hol{background:rgba(214,69,69,.15);color:var(--bad)}
+.cd.today{border-color:var(--liquid)}
+.cd.sel{background:var(--head);color:#fff}.cd.hol.sel{background:var(--bad);color:#fff}
+.vd{color:var(--mute);font-size:14px;margin:2px 0 10px}
+.bt{display:flex;gap:6px}.ann .eh{border-color:var(--line);color:var(--ink)}
+#admin .wk{flex-direction:row;flex-wrap:wrap;gap:12px}#admin input.wo{width:auto;padding:0;flex:none}.chk{display:flex;gap:4px;align-items:center;font-size:14px}
+[hidden]{display:none!important}
+#nav{position:sticky;top:0;z-index:5;display:flex;gap:6px;align-items:center;overflow-x:auto;padding:8px 12px;padding-top:calc(8px + env(safe-area-inset-top,0px));background:var(--head);border-top:1px solid rgba(255,255,255,.08);box-shadow:0 4px 14px rgba(0,0,0,.18)}
+#nav button{flex:0 0 auto;border:0;background:transparent;color:#9fc3c8;padding:8px 14px;border-radius:8px;font:500 15px "IBM Plex Sans",sans-serif;cursor:pointer}
+#nav button[aria-current=true]{background:rgba(45,212,191,.16);color:#fff;box-shadow:inset 0 -2px 0 var(--liquid)}
+#nav button:focus-visible{outline:3px solid var(--liquid)}
+#nav #admbtn{position:static;margin-left:auto;border:1.5px solid var(--liquid);color:#e6f2f1;padding:6px 14px}
+.hd{padding-right:0}
+.now{background:linear-gradient(135deg,var(--head),#0f3b4a);color:#e6f2f1;border-radius:12px;padding:14px 16px;margin-bottom:14px}
+.now .k{font-size:13px;color:#9fc3c8}.now .t{font:800 22px/1.2 "Bricolage Grotesque",sans-serif;margin:2px 0}
+.now .c{font:600 15px ui-monospace,Menlo,Consolas,monospace;color:var(--liquid)}
+.now .bar{height:8px;background:rgba(255,255,255,.15);border-radius:99px;margin-top:10px;overflow:hidden}.now .bar i{display:block;height:100%;background:var(--liquid)}
+.now .st{display:flex;gap:22px;margin-top:12px;font-size:13px;color:#9fc3c8}.now .st b{display:block;color:#fff;font-size:20px}
+.wvd{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:10px}
+.wvd.tdy{border-color:var(--liquid);box-shadow:0 0 0 2px rgba(45,212,191,.25)}.wvd.off{border-left:6px solid var(--bad)}
+.wvh{border:0;background:transparent;color:var(--ink);font:600 16px "Bricolage Grotesque",sans-serif;padding:0;cursor:pointer;text-align:left}
+.wvr{font-size:14px;padding:4px 0;border-top:1px solid var(--line);margin-top:4px}.wvr:first-of-type{border-top:0}.wvr.cx{text-decoration:line-through;color:var(--mute)}.wvr.mute{color:var(--mute)}
+.wt{display:inline-block;min-width:74px;color:var(--mute)}
+.b-taken{background:#6b4fd3}.card.taken{border-left-color:#6b4fd3}.taken .info h2{text-decoration:line-through;opacity:.7}
+</style>
+</head>
+<body>
+<header>
+  <svg class="rings" viewBox="0 0 260 150" aria-hidden="true" fill="none" stroke="#2dd4bf" stroke-width="3" stroke-linejoin="round"><polygon points="130,20 182,50 182,110 130,140 78,110 78,50"/><path d="M130 34L170 57M170 103L130 126M90 103L90 57"/><polygon points="178,38 204,53 204,83 178,98 152,83 152,53"/></svg>
+  <div class="hd">
+    <svg class="flask" viewBox="0 0 48 48" aria-hidden="true"><path d="M19 4h10v12l12 22a4 4 0 0 1-3.5 6h-27A4 4 0 0 1 7 38l12-22z" fill="none" stroke="#2dd4bf" stroke-width="2.5" stroke-linejoin="round"/><path d="M13 32h22l4 7a2 2 0 0 1-1.7 3H10.7A2 2 0 0 1 9 39z" fill="#2dd4bf" opacity=".75"/><circle cx="21" cy="26" r="1.8" fill="#2dd4bf"/><circle cx="27" cy="21" r="1.3" fill="#2dd4bf"/><path d="M17 4h14" stroke="#2dd4bf" stroke-width="2.5" stroke-linecap="round"/></svg>
+    <div><div class="chip" id="batch"></div><h1 id="title">Class Schedule</h1><div class="sub" id="dept"></div><div class="sub" id="clock"></div></div>
+  </div>
+</header>
+<nav id="nav" aria-label="Menu">
+  <button data-v="sched" aria-current="true">Schedule</button>
+  <button data-v="week">Week</button>
+  <button data-v="cal">Calendar</button>
+  <button data-v="ann">Notices</button>
+  <button id="admbtn" type="button">Admin</button>
+</nav>
+<main>
+  <div id="admin" hidden></div>
+  <section id="v-sched"><div class="now" id="nowc"></div><div class="days" id="days" role="group" aria-label="Choose day"></div><div id="list"></div></section>
+  <section id="v-week" hidden><div id="week"></div></section>
+  <section id="v-cal" hidden><div class="calw"><div id="cal"></div></div></section>
+  <section id="v-ann" hidden><div id="ann"></div></section>
+</main>
+<footer id="foot">Loading…</footer>
+
+<dialog id="tdlg"><form class="f" id="tform">
+  <h3>Edit whole timetable</h3>
+  <div class="meta">One class per line: Day | Start | End | Subject | Code | Room | Teacher. Use 24-hour times like 14:30. Code, room and teacher can be left empty. Statuses and notes reset to Auto.</div>
+  <textarea id="tx" wrap="off" spellcheck="false"></textarea>
+  <button type="submit">Apply timetable</button><button type="button" class="ghost" id="tclose">Cancel</button>
+  <div id="tm" class="meta"></div>
+</form></dialog>
+
+<dialog id="hdlg"><form class="f" id="hform">
+  <h3>Edit holiday</h3>
+  <input id="hn2" placeholder="Holiday name">
+  <div class="meta">From</div><input id="hf2" type="date">
+  <div class="meta">To (optional)</div><input id="ht2" type="date">
+  <button type="submit">Save holiday</button><button type="button" class="ghost" id="hclose">Cancel</button>
+  <div id="hm" class="meta"></div>
+</form></dialog>
+
+<dialog id="edlg"><form class="f" id="eform">
+  <h3>Edit class</h3>
+  <select id="ed" aria-label="Day"></select>
+  <input id="es" placeholder="Subject"><input id="ec" placeholder="Short code, e.g. HT" maxlength="3">
+  <div class="row"><input id="e1" type="time"><input id="e2" type="time"></div>
+  <input id="er" placeholder="Room"><input id="et" placeholder="Teacher">
+  <button type="submit">Save class</button><button type="button" class="ghost" id="eclose">Cancel</button>
+  <div id="em" class="meta"></div>
+</form></dialog>
+
+<dialog id="login"><form class="f" id="lform">
+  <h3>Admin sign-in</h3>
+  <input id="le" type="email" placeholder="Email" autocomplete="username" required>
+  <input id="lp" type="password" placeholder="Password" autocomplete="current-password" required>
+  <button type="submit">Sign in</button>
+  <button type="button" class="ghost" id="lforgot">Forgot password</button>
+  <button type="button" class="ghost" id="lclose">Cancel</button>
+  <div id="lm" class="meta"></div>
+</form></dialog>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script>
+/* PASTE YOUR FIREBASE CONFIG HERE (see setup steps) */
+var FB=window.FB||{apiKey:"PASTE_API_KEY",authDomain:"PASTE_PROJECT.firebaseapp.com",projectId:"PASTE_PROJECT_ID",appId:"PASTE_APP_ID"};
+
+var WEEK=["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+var JSD=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+var data=null,picked=JSD[new Date().getDay()],dirty=false,user=null,db=null,auth=null,sel=new Date(),selManual=false,calM=null,lastMin=-1;sel.setHours(12,0,0,0);
+var ready=FB.apiKey.indexOf("PASTE")<0&&typeof firebase!=="undefined";
+var $=function(i){return document.getElementById(i)};
+var mins=function(t){var p=t.split(":");return +p[0]*60+ +p[1]};
+var fmt=function(t){var p=t.split(":"),h=+p[0];return (h%12||12)+":"+p[1]+(h<12?" am":" pm")};
+function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function norm(d){d.days=d.days||{};WEEK.forEach(function(w){d.days[w]=d.days[w]||[]});if(!d.notices)d.notices=d.notice?[{t:d.notice,d:""}]:[];delete d.notice;d.holidays=d.holidays||[];d.weekoff=d.weekoff||[];return d}
+function setData(d){data=norm(d);render();$("foot").textContent=ready?"Live: changes appear instantly.":"Updates automatically every 30 seconds."}
+function loadFile(force){
+  fetch("schedule.json?t="+Date.now(),{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json()})
+  .then(function(d){if(!dirty&&(force||!data))setData(d)})
+  .catch(function(){if(!data)$("foot").textContent="Couldn't load the schedule. Check your connection."});
+}
+var LABEL={live:"Ongoing",soon:"Upcoming",done:"Completed",cancelled:"Cancelled",moved:"Moved",taken:"Taken by another subject"};
+function statusOf(c,rel,now){
+  var s=c.status||"auto";
+  if(s!=="auto")return s;
+  if(rel<0)return "done";
+  if(rel>0)return "soon";
+  if(now>=mins(c.end))return "done";
+  if(now>=mins(c.start))return "live";
+  return "soon";
+}
+function badgeText(c,st){var t=st==='taken'?(c.sub?'Taken by '+c.sub:LABEL.taken):LABEL[st];return t+(c.note?': '+c.note:'')}
+function isoOf(t){var m=t.getMonth()+1,d=t.getDate();return t.getFullYear()+"-"+(m<10?"0":"")+m+"-"+(d<10?"0":"")+d}
+function todayD(){var t=new Date();t.setHours(12,0,0,0);return t}
+function addDays(t,n){var x=new Date(t);x.setDate(x.getDate()+n);return x}
+function wd(t){return WEEK[(t.getDay()+6)%7]}
+function mondayOf(t){return addDays(t,-((t.getDay()+6)%7))}
+function setSel(t,manual){sel=t;selManual=manual;picked=wd(t);calM=new Date(t.getFullYear(),t.getMonth(),1)}
+function goDay(day){setSel(addDays(mondayOf(sel),WEEK.indexOf(day)),true)}
+function holFor(iso){
+  for(var i=0;i<data.holidays.length;i++){var x=data.holidays[i];if(iso>=x.from&&iso<=(x.to||x.from))return x}
+  if(data.weekoff.indexOf(wd(new Date(iso+"T12:00:00")))>-1)return {name:"Weekly holiday",weekly:true};
+  return null;
+}
+function fmtD(s){s=Math.max(0,Math.round(s));var h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60;return h?h+"h "+m+"m":m+"m "+(x<10?"0":"")+x+"s"}
+function updateNow(){
+  var el=$("nowc");if(!data||!el)return;
+  var d=new Date(),ns=d.getHours()*3600+d.getMinutes()*60+d.getSeconds(),hl=holFor(isoOf(d));
+  if(hl){el.innerHTML='<div class="k">Today</div><div class="t">Holiday · '+esc(hl.name)+'</div><div class="k">No classes today.</div>';return}
+  var L=data.days[wd(d)].slice().sort(function(a,b){return mins(a.start)-mins(b.start)}).filter(function(c){return c.status!=="cancelled"&&c.status!=="moved"});
+  if(!L.length){el.innerHTML='<div class="k">Today</div><div class="t">No classes today</div>';return}
+  var on=null,nx=null,dn=0;
+  L.forEach(function(c){var s=c.status==="taken"?"auto":(c.status||"auto"),st=statusOf({status:s,start:c.start,end:c.end},0,ns/60);if(st==="done")dn++;else if(st==="live"){if(!on)on=c}else if(!nx)nx=c});
+  var nm=function(c){return c.status==="taken"&&c.sub?c.sub+" (instead of "+c.subject+")":c.subject},o="";
+  if(on){var a=mins(on.start)*60,b=mins(on.end)*60;o='<div class="k">Ongoing now</div><div class="t">'+esc(nm(on))+'</div><div class="c">ends in '+fmtD(b-ns)+'</div><div class="bar"><i style="width:'+Math.max(3,Math.min(100,(ns-a)/(b-a)*100))+'%"></i></div>'}
+  else if(nx)o='<div class="k">Next class</div><div class="t">'+esc(nm(nx))+'</div><div class="c">'+fmt(nx.start)+' · in '+fmtD(mins(nx.start)*60-ns)+'</div>';
+  else o='<div class="k">Today</div><div class="t">All classes are done</div>';
+  el.innerHTML=o+'<div class="st"><span><b>'+L.length+'</b>Classes</span><span><b>'+dn+'</b>Done</span><span><b>'+(L.length-dn)+'</b>Left</span></div>';
+}
+function renderWeek(){
+  var mon=mondayOf(sel),s="",ti=isoOf(todayD());
+  WEEK.forEach(function(w,k){
+    var dt=addDays(mon,k),iso=isoOf(dt),hl=holFor(iso);
+    s+='<div class="wvd'+(iso===ti?" tdy":"")+(hl?" off":"")+'"><button class="wvh" data-k="'+k+'">'+w+' · '+dt.getDate()+' '+dt.toLocaleDateString(undefined,{month:"short"})+(iso===ti?" · today":"")+'</button>';
+    if(hl)s+='<div class="wvr">Holiday: '+esc(hl.name)+'</div>';
+    else if(!data.days[w].length)s+='<div class="wvr mute">No classes</div>';
+    else data.days[w].slice().sort(function(a,b){return mins(a.start)-mins(b.start)}).forEach(function(c){var x=c.status||"";s+='<div class="wvr'+(x==="cancelled"||x==="moved"?" cx":"")+'"><span class="wt">'+fmt(c.start)+'</span><b>'+esc(c.code)+'</b> '+esc(c.subject)+(x==="cancelled"?" · Cancelled":x==="moved"?" · Moved":x==="taken"?" · Taken by "+esc(c.sub||"another subject"):"")+'</div>'});
+    s+='</div>';
+  });
+  $("week").innerHTML=s;
+}
+var view="sched";
+function show(v){view=v;["sched","week","cal","ann"].forEach(function(x){$("v-"+x).hidden=x!==v});Array.prototype.forEach.call(document.querySelectorAll("#nav [data-v]"),function(b){b.setAttribute("aria-current",b.dataset.v===v)});window.scrollTo(0,0)}
+$("nav").addEventListener("click",function(e){var v=e.target.dataset&&e.target.dataset.v;if(v)show(v)});
+$("week").addEventListener("click",function(e){var k=e.target.dataset&&e.target.dataset.k;if(k===undefined)return;setSel(addDays(mondayOf(sel),+k),true);render();show("sched")});
+function tick(){
+  var d=new Date();
+  $("clock").textContent=d.toLocaleDateString(undefined,{weekday:"long",day:"numeric",month:"long"})+", "+d.toLocaleTimeString([],{hour:"numeric",minute:"2-digit",second:"2-digit"});
+  updateNow();
+  if(data&&!dirty&&!busy()&&(d.getMinutes()!==lastMin||(!selManual&&isoOf(sel)!==isoOf(d)))){lastMin=d.getMinutes();render()}
+}
+function renderCal(){
+  var m=calM||(calM=new Date(sel.getFullYear(),sel.getMonth(),1)),y=m.getFullYear(),mo=m.getMonth();
+  var lead=(new Date(y,mo,1,12).getDay()+6)%7,dim=new Date(y,mo+1,0).getDate(),ti=isoOf(todayD()),si=isoOf(sel);
+  var s='<div class="calh"><button class="cn" data-m="-1" aria-label="Previous month">‹</button><strong>'+m.toLocaleDateString(undefined,{month:"long",year:"numeric"})+'</strong><button class="cn" data-m="1" aria-label="Next month">›</button><button class="cn" data-m="0">Today</button></div><div class="calg">';
+  WEEK.forEach(function(w){s+='<span class="cw">'+w.slice(0,2)+'</span>'});
+  for(var i=0;i<lead;i++)s+='<span></span>';
+  for(var k=1;k<=dim;k++){
+    var iso=isoOf(new Date(y,mo,k,12)),hl=holFor(iso);
+    s+='<button class="cd'+(hl?" hol":"")+(iso===ti?" today":"")+(iso===si?" sel":"")+'" data-d="'+iso+'"'+(hl?' title="'+esc(hl.name)+'"':"")+'>'+k+'</button>';
+  }
+  $("cal").innerHTML=s+'</div><div class="meta" style="margin-top:8px">Red dates are holidays. Tap a date to open its classes.</div>';
+}
+function dshort(iso){return new Date(iso+"T12:00:00").toLocaleDateString(undefined,{day:"numeric",month:"short"})}
+function opt(v,l,cur){return '<option value="'+v+'"'+(cur===v?" selected":"")+'>'+l+'</option>'}
+
+function render(){
+  var d=new Date(),now=d.getHours()*60+d.getMinutes(),admin=!!user;
+  if(!selManual){sel=todayD();picked=wd(sel)}
+  $("title").textContent=data.className||"Class Schedule";document.title=data.className||"Class Schedule";
+  $("dept").textContent=data.sub||"";$("batch").textContent=data.batch||"";
+  tick();
+  var a="";
+  data.notices.forEach(function(n,i){a+='<div class="it"><div>'+esc(n.t)+(n.d?'<small>'+esc(n.d)+'</small>':'')+'</div>'+(admin?'<button data-n="'+i+'" class="dn">Delete</button>':'')+'</div>'});
+  var todayIso=isoOf(d),hl="";
+  data.holidays.forEach(function(x,i){if((x.to||x.from)<todayIso)return;hl+='<div class="it"><div>'+esc(x.name)+'<small>'+dshort(x.from)+(x.to&&x.to!==x.from?" – "+dshort(x.to):"")+'</small></div>'+(admin?'<div class="bt"><button data-h="'+i+'" class="eh">Edit</button><button data-h="'+i+'" class="dh">Delete</button></div>':'')+'</div>'});
+  $("ann").innerHTML=(a?'<div class="ann"><h3>Announcements</h3>'+a+'</div>':"")+(hl?'<div class="ann hol"><h3>Upcoming holidays</h3>'+hl+'</div>':"");
+  var tabs=$("days");tabs.innerHTML="";
+  WEEK.forEach(function(n){var b=document.createElement("button");var dt=addDays(mondayOf(sel),WEEK.indexOf(n));b.textContent=n.slice(0,3)+" "+dt.getDate();if(holFor(isoOf(dt)))b.className="hol";b.setAttribute("aria-pressed",n===picked);b.onclick=function(){goDay(n);render()};tabs.appendChild(b)});
+  var rel=isoOf(sel)<todayIso?-1:isoOf(sel)>todayIso?1:0;
+  var items=data.days[picked].sort(function(a,b){return mins(a.start)-mins(b.start)});
+  var html="",hd=holFor(isoOf(sel)),banner=hd?'<div class="holc"><h2>Holiday</h2><div>'+esc(hd.name)+'</div>'+(admin?'<div class="meta">No classes are shown on a holiday. Delete the holiday under Upcoming holidays to edit this day.</div>':"")+'</div>':"";
+  items.forEach(function(c,i){
+    var st=statusOf(c,rel,now),pct=0;
+    if(st==="live")pct=Math.max(5,Math.min(100,Math.round((now-mins(c.start))/(mins(c.end)-mins(c.start))*100)));
+    if(st==="done")pct=100;
+    var ad=admin?'<div class="adm"><select class="st" data-i="'+i+'" aria-label="Status">'+opt("auto","Auto (by clock)",c.status||"auto")+opt("live","Ongoing",c.status)+opt("done","Completed",c.status)+opt("cancelled","Cancelled",c.status)+opt("moved","Moved",c.status)+opt("taken","Taken by another subject",c.status)+'</select>'+(c.status==="taken"?'<input class="sb" data-i="'+i+'" placeholder="Which subject is taking this class?" value="'+esc(c.sub||"")+'">':"")+'<input class="nt" data-i="'+i+'" placeholder="Note, e.g. Now in Room 204" value="'+esc(c.note||"")+'"><div class="row2"><button class="ed" data-i="'+i+'">Edit class</button><button class="del" data-i="'+i+'">Delete class</button></div></div>':"";
+    html+='<div class="card '+st+'"><div class="tile"><div class="fill" style="height:'+pct+'%"></div><span class="n">'+(i+1)+'</span><span class="s">'+esc(c.code)+'</span></div>'+
+    '<div class="info"><h2>'+esc(c.subject)+'</h2><div class="meta">'+esc(c.room)+(c.teacher?(c.room?" · ":"")+esc(c.teacher):"")+'</div>'+
+    '<div class="time">'+fmt(c.start)+" – "+fmt(c.end)+'</div><span class="badge b-'+st+'">'+esc(badgeText(c,st))+'</span>'+ad+'</div></div>';
+  });
+  renderCal();renderWeek();
+  var nb=document.querySelector("#nav [data-v=ann]");if(nb)nb.textContent="Notices"+(data.notices.length?" ("+data.notices.length+")":"");
+  $("list").innerHTML='<div class="vd">'+sel.toLocaleDateString(undefined,{weekday:"long",day:"numeric",month:"long",year:"numeric"})+(rel===0?" · today":"")+'</div>'+banner+(hd?"":(html||'<div class="empty">No classes on '+picked+'.</div>'));
+}
+
+/* ---------- Admin ---------- */
+function msg(t){var m=$("am");if(m)m.textContent=t}
+var ver=0,timer=null;
+function busy(){var a=document.activeElement;return user&&a&&/^(INPUT|SELECT|TEXTAREA)$/.test(a.tagName)}
+function touch(delay){dirty=true;ver++;msg("Saving…");clearTimeout(timer);timer=setTimeout(save,delay===undefined?800:delay)}
+function adminUI(){
+  $("admbtn").textContent=user?"Admin ✓":"Admin";
+  var p=$("admin");
+  if(!user){p.hidden=true;p.innerHTML="";return}
+  p.innerHTML='<h3>Admin</h3><input id="ati" placeholder="Class title" value="'+esc(data?data.className||"":"")+'"><input id="asb" placeholder="Subtitle (semester, department)" value="'+esc(data?data.sub||"":"")+'"><input id="abt" placeholder="Batch, e.g. Batch 2028" value="'+esc(data?data.batch||"":"")+'">'+
+  '<div class="lb">Announcement</div><div class="row"><input id="ann1" placeholder="Type an announcement"><button id="aadd">Post</button></div>'+
+  '<details><summary>Add a class</summary><div><select id="cd">'+WEEK.map(function(w){return opt(w,w,picked)}).join("")+'</select><input id="cs" placeholder="Subject, e.g. Heat Transfer"><input id="cc" placeholder="Short code, e.g. HT" maxlength="3"><div class="row"><input id="c1" type="time" value="09:00"><input id="c2" type="time" value="09:45"></div><input id="cr" placeholder="Room"><input id="ct" placeholder="Teacher"><button id="cadd">Add class</button></div></details>'+
+  '<details><summary>Weekly holidays (every week)</summary><div class="wk">'+WEEK.map(function(w){return '<label class="chk"><input type="checkbox" class="wo" value="'+w+'"'+((data&&data.weekoff||[]).indexOf(w)>-1?" checked":"")+'> '+w.slice(0,3)+'</label>'}).join("")+'</div></details>'+
+  '<details><summary>Add a holiday</summary><div><input id="hn" placeholder="Holiday name, e.g. Diwali"><div class="lb">From</div><input id="hf" type="date"><div class="lb">To (optional, for several days)</div><input id="ht" type="date"><button id="hadd">Add holiday</button></div></details>'+
+  '<details><summary>Timetable tools</summary><div><button id="tedit">Edit whole timetable</button><button id="tclr">Clear this day</button><button id="tall">Clear whole timetable</button><button id="tfile">Replace timetable from schedule.json</button></div></details>'+
+  '<div class="row"><button id="aout" class="ghost">Sign out</button></div><div id="am">Changes save automatically.</div>';
+  $("ati").oninput=function(){data.className=this.value;touch();$("title").textContent=this.value||"Class Schedule"};
+  $("asb").oninput=function(){data.sub=this.value;touch();$("dept").textContent=this.value};
+  $("aadd").onclick=function(){var v=$("ann1").value.trim();if(!v)return;data.notices.unshift({t:v,d:new Date().toLocaleString(undefined,{day:"numeric",month:"short",hour:"numeric",minute:"2-digit"})});$("ann1").value="";touch(0);render()};
+  $("cadd").onclick=addClass;
+  $("abt").oninput=function(){data.batch=this.value;touch();$("batch").textContent=this.value};
+  $("hadd").onclick=addHoliday;
+  Array.prototype.forEach.call(document.querySelectorAll("#admin .wo"),function(c){c.onchange=function(){data.weekoff=Array.prototype.filter.call(document.querySelectorAll("#admin .wo"),function(x){return x.checked}).map(function(x){return x.value});touch(0);render()}});$("tedit").onclick=openTT;$("tfile").onclick=replaceFromFile;
+  $("tclr").onclick=function(){if(confirm("Remove all classes on "+picked+"?")){data.days[picked]=[];touch(0);render()}};
+  $("tall").onclick=function(){if(confirm("Remove ALL classes from the whole timetable? Announcements and holidays stay.")){WEEK.forEach(function(w){data.days[w]=[]});touch(0);render()}};
+  $("aout").onclick=function(){auth.signOut()};
+}
+function addHoliday(){
+  var n=$("hn").value.trim()||"Holiday",f=$("hf").value,t=$("ht").value;
+  if(!f){msg("Pick the holiday date.");return}
+  if(t&&t<f){msg("End date must not be before the start date.");return}
+  var x={name:n,from:f};if(t&&t!==f)x.to=t;
+  data.holidays.push(x);data.holidays.sort(function(a,b){return a.from<b.from?-1:1});
+  $("hn").value="";$("hf").value="";$("ht").value="";touch(0);render();
+}
+function replaceFromFile(){
+  if(!confirm("Replace the whole timetable with the one in schedule.json? Announcements and holidays stay."))return;
+  fetch("schedule.json?t="+Date.now(),{cache:"no-store"}).then(function(r){if(!r.ok)throw 0;return r.json()})
+  .then(function(d){norm(d);data.days=d.days;touch(0);render()}).catch(function(){msg("Couldn't read schedule.json.")});
+}
+function tnorm(t){var m=/^(\d{1,2}):(\d{2})$/.exec((t||"").trim());if(!m||+m[1]>23||+m[2]>59)return null;return (+m[1]<10?"0":"")+(+m[1])+":"+m[2]}
+function openTT(){
+  var L=[];
+  WEEK.forEach(function(w){data.days[w].slice().sort(function(a,b){return mins(a.start)-mins(b.start)}).forEach(function(c){L.push([w,c.start,c.end,c.subject,c.code||"",c.room||"",c.teacher||""].join(" | "))})});
+  $("tx").value=L.join("\n");$("tm").textContent="";$("tdlg").showModal();
+}
+$("tclose").onclick=function(){$("tdlg").close()};
+$("tform").onsubmit=function(e){
+  e.preventDefault();
+  var days={},bad=[],n=0;WEEK.forEach(function(w){days[w]=[]});
+  $("tx").value.split("\n").forEach(function(line,k){
+    line=line.trim();if(!line||line.charAt(0)==="#")return;
+    var p=line.split(/\s*\|\s*|\t/),dn=(p[0]||"").trim().toLowerCase().slice(0,3);
+    var day=WEEK.filter(function(w){return w.toLowerCase().slice(0,3)===dn})[0],a=tnorm(p[1]),b=tnorm(p[2]),s=(p[3]||"").trim();
+    if(!day||!a||!b||!s||mins(b)<=mins(a)){bad.push(k+1);return}
+    days[day].push({code:((p[4]||"").trim()||s.slice(0,2)).toUpperCase().slice(0,3),subject:s,start:a,end:b,room:(p[5]||"").trim(),teacher:(p[6]||"").trim(),status:"auto"});n++;
+  });
+  if(bad.length){$("tm").textContent="Please check line "+bad.slice(0,8).join(", ")+(bad.length>8?"…":"")+". Day, times and subject are required.";return}
+  if(!n&&!confirm("This will remove every class. Continue?"))return;
+  data.days=days;touch(0);render();$("tdlg").close();
+};
+var hedit=-1;
+function openHol(i){var x=data.holidays[i];hedit=i;$("hn2").value=x.name;$("hf2").value=x.from;$("ht2").value=x.to||"";$("hm").textContent="";$("hdlg").showModal()}
+$("hclose").onclick=function(){$("hdlg").close()};
+$("hform").onsubmit=function(e){
+  e.preventDefault();var f=$("hf2").value,t=$("ht2").value;
+  if(!f){$("hm").textContent="Pick the date.";return}
+  if(t&&t<f){$("hm").textContent="End date must not be before the start date.";return}
+  var x=data.holidays[hedit];x.name=$("hn2").value.trim()||"Holiday";x.from=f;if(t&&t!==f)x.to=t;else delete x.to;
+  data.holidays.sort(function(a,b){return a.from<b.from?-1:1});touch(0);render();$("hdlg").close();
+};
+$("cal").addEventListener("click",function(e){
+  var t=e.target;
+  if(t.classList.contains("cn")){
+    var m=+t.dataset.m;
+    if(m===0){selManual=false;sel=todayD();picked=wd(sel);calM=new Date(sel.getFullYear(),sel.getMonth(),1)}
+    else calM=new Date(calM.getFullYear(),calM.getMonth()+m,1);
+    render();
+  }else if(t.classList.contains("cd")){setSel(new Date(t.dataset.d+"T12:00:00"),true);render();show("sched")}
+});
+var editing=null;
+function openEdit(i){
+  var c=data.days[picked][i];editing={day:picked,i:i};
+  $("ed").innerHTML=WEEK.map(function(w){return opt(w,w,picked)}).join("");
+  $("es").value=c.subject;$("ec").value=c.code||"";$("e1").value=c.start;$("e2").value=c.end;$("er").value=c.room||"";$("et").value=c.teacher||"";
+  $("em").textContent="";$("edlg").showModal();
+}
+$("eclose").onclick=function(){$("edlg").close()};
+$("eform").onsubmit=function(e){
+  e.preventDefault();
+  var s=$("es").value.trim(),a=$("e1").value,b=$("e2").value;
+  if(!s||!a||!b){$("em").textContent="Enter a subject and both times.";return}
+  if(mins(b)<=mins(a)){$("em").textContent="End time must be after start time.";return}
+  var c=data.days[editing.day][editing.i];
+  c.subject=s;c.code=($("ec").value.trim()||s.slice(0,2)).toUpperCase().slice(0,3);c.start=a;c.end=b;c.room=$("er").value.trim();c.teacher=$("et").value.trim();
+  var nd=$("ed").value;
+  if(nd!==editing.day){data.days[editing.day].splice(editing.i,1);data.days[nd].push(c);goDay(nd)}
+  touch(0);render();$("edlg").close();
+};
+function addClass(){
+  var day=$("cd").value,s=$("cs").value.trim(),a=$("c1").value,b=$("c2").value;
+  if(!s||!a||!b){msg("Enter a subject and both times.");return}
+  if(mins(b)<=mins(a)){msg("End time must be after start time.");return}
+  data.days[day].push({code:($("cc").value.trim()||s.slice(0,2)).toUpperCase().slice(0,3),subject:s,start:a,end:b,room:$("cr").value.trim(),teacher:$("ct").value.trim(),status:"auto"});
+  goDay(day);$("cs").value="";$("cc").value="";touch(0);render();
+}
+function save(){
+  var v=ver;
+  db.doc("site/schedule").set(JSON.parse(JSON.stringify(data)))
+   .then(function(){if(ver===v)dirty=false;msg("Saved ✓ Everyone sees it now.")})
+   .catch(function(){msg("Save failed. This account isn't allowed to edit, or you're offline.")});
+}
+$("admbtn").onclick=function(){
+  if(!ready){alert("Admin isn't set up yet. Add your Firebase config in index.html.");return}
+  if(user){var p=$("admin");p.hidden=!p.hidden;window.scrollTo(0,0)}else{$("lm").textContent="";$("login").showModal()}
+};
+$("lclose").onclick=function(){$("login").close()};
+$("lform").onsubmit=function(e){
+  e.preventDefault();$("lm").textContent="Signing in…";
+  auth.signInWithEmailAndPassword($("le").value.trim(),$("lp").value)
+   .then(function(){$("lp").value="";$("login").close()})
+   .catch(function(){$("lm").textContent="Wrong email or password."});
+};
+$("lforgot").onclick=function(){
+  var m=$("le").value.trim();if(!m){$("lm").textContent="Enter your email first.";return}
+  auth.sendPasswordResetEmail(m).then(function(){$("lm").textContent="Password reset email sent."}).catch(function(){$("lm").textContent="Couldn't send the email."});
+};
+$("list").addEventListener("change",function(e){
+  if(!e.target.classList.contains("st"))return;
+  var c=data.days[picked][+e.target.dataset.i];c.status=e.target.value;if(c.status!=="taken")delete c.sub;touch(0);render();
+});
+$("list").addEventListener("input",function(e){
+  var k=e.target.classList.contains("nt")?"note":e.target.classList.contains("sb")?"sub":"";
+  if(!k)return;
+  var c=data.days[picked][+e.target.dataset.i];
+  if(e.target.value)c[k]=e.target.value;else delete c[k];
+  touch();
+});
+$("list").addEventListener("click",function(e){
+  if(e.target.classList.contains("ed")){openEdit(+e.target.dataset.i);return}
+  if(!e.target.classList.contains("del"))return;
+  var i=+e.target.dataset.i,c=data.days[picked][i];
+  if(confirm("Delete "+c.subject+" on "+picked+"?")){data.days[picked].splice(i,1);touch(0);render()}
+});
+$("ann").addEventListener("click",function(e){
+  if(e.target.classList.contains("eh")){openHol(+e.target.dataset.h);return}
+  if(e.target.classList.contains("dh")){data.holidays.splice(+e.target.dataset.h,1);touch(0);render();return}
+  if(!e.target.classList.contains("dn"))return;
+  data.notices.splice(+e.target.dataset.n,1);touch(0);render();
+});
+
+if(ready){
+  firebase.initializeApp(FB);auth=firebase.auth();db=firebase.firestore();
+  auth.onAuthStateChanged(function(u){user=u;adminUI();if(data)render()});
+  db.doc("site/schedule").onSnapshot(function(s){if(dirty||busy())return;if(s.exists)setData(s.data());else loadFile()},function(){loadFile()});
+}else{
+  loadFile();setInterval(function(){loadFile(true)},30000);
+}
+setInterval(function(){if(data&&!dirty&&!busy())render()},30000);
+tick();setInterval(tick,1000);
+</script>
+</body>
+</html>
