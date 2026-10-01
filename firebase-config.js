@@ -1,7 +1,8 @@
 /* Paste your Firebase values between the quotes. You only do this once. */
 window.FB = {
-  apiKey: "PASTE_API_KEY",
-  authDomain: "PASTE_PROJECT.firebaseapp.com",
-  projectId: "PASTE_PROJECT_ID",
-  appId: "PASTE_APP_ID"
+  apiKey: "AIzaSyBDDnlRQ6KRV4vgLdyXxSsb4_8UFT5OGUw",
+  authDomain:"chem-class-f829b.firebaseapp.com",
+  projectId: "chem-class-f829b",
+  appId: "1:1090659677243:web:0ebacdad265bc7227e981e"
 };
+
